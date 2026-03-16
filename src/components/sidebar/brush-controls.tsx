@@ -1,0 +1,30 @@
+import { FigmaSection } from '@/components/shared/figma-section'
+import { FigmaTextInput } from '@/components/shared/figma-input'
+import { FigmaColor } from '@/components/shared/figma-color'
+import { LabeledSlider } from '@/components/shared/labeled-slider'
+import { TIPS } from '@/constants/tooltips'
+import type { ChartConfig } from '@/types/chart-config'
+
+interface BrushControlsProps {
+  config: ChartConfig
+  update: (path: string, value: unknown) => void
+}
+
+export function BrushControls({ config, update }: BrushControlsProps) {
+  const brush = config.brush
+
+  return (
+    <FigmaSection
+      title="Brush"
+      visible={brush.show}
+      onVisibleChange={(v) => update('brush.show', v)}
+    >
+      <LabeledSlider label="Height" tooltip={TIPS['Brush Height']} value={brush.height} min={20} max={100} onValueChange={(v) => update('brush.height', v)} />
+      <FigmaColor label="Stroke" tooltip={TIPS['Stroke']} color={brush.stroke} onChange={(v) => update('brush.stroke', v)} />
+      <FigmaColor label="Fill" tooltip={TIPS['Fill']} color={brush.fill} onChange={(v) => update('brush.fill', v)} />
+      <LabeledSlider label="Traveller W" tooltip={TIPS['Traveller W']} value={brush.travellerWidth} min={1} max={20} onValueChange={(v) => update('brush.travellerWidth', v)} />
+      <LabeledSlider label="Gap" tooltip={TIPS['Gap']} value={brush.gap} min={0} max={10} onValueChange={(v) => update('brush.gap', v)} />
+      <FigmaTextInput label="Data Key" tooltip={TIPS['Data Key']} value={brush.dataKey} onChange={(v) => update('brush.dataKey', v)} />
+    </FigmaSection>
+  )
+}
