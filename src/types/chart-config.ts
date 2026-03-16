@@ -1,4 +1,4 @@
-export type ChartType = 'line' | 'bar' | 'area' | 'pie' | 'scatter'
+export type ChartType = 'line' | 'bar' | 'area' | 'pie' | 'scatter' | 'combo'
 
 export type CurveType =
   | 'basis' | 'basisClosed' | 'basisOpen'

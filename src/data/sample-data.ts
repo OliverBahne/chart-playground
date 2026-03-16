@@ -58,5 +58,6 @@ export const scatterSampleData: ScatterDataPoint[] = [
 export function getSampleData(chartType: ChartType, seriesKeys?: string[]) {
   if (chartType === 'pie') return pieSampleData
   if (chartType === 'scatter') return scatterSampleData
+  if (chartType === 'combo') return getCartesianData(seriesKeys ?? ['series1', 'series2', 'series3'])
   return getCartesianData(seriesKeys ?? ['series1', 'series2', 'series3'])
 }

@@ -1,4 +1,4 @@
-import { LineChart, BarChart3, AreaChart, PieChart, ScatterChart } from 'lucide-react'
+import { LineChart, BarChart3, AreaChart, PieChart, ScatterChart, ChartNoAxesCombined } from 'lucide-react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import type { ChartType } from '@/types/chart-config'
 
@@ -8,6 +8,7 @@ const chartTypes: { value: ChartType; icon: React.ElementType; label: string }[]
   { value: 'area', icon: AreaChart, label: 'Area' },
   { value: 'pie', icon: PieChart, label: 'Pie' },
   { value: 'scatter', icon: ScatterChart, label: 'Scatter' },
+  { value: 'combo', icon: ChartNoAxesCombined, label: 'Combo' },
 ]
 
 interface ChartTypeSelectorProps {

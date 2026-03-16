@@ -88,7 +88,7 @@ export const DEFAULT_CONFIG: ChartConfig = {
   chartWidth: 0,
   chartHeight: 400,
   margin: { top: 20, right: 30, bottom: 20, left: 30 },
-  animationEnabled: true,
+  animationEnabled: false,
 
   chartLayout: {
     layout: 'horizontal',

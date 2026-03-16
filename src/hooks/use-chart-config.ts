@@ -46,8 +46,19 @@ function createSeries(seriesType: string, index: number) {
 
 function configReducer(state: ChartConfig, action: ConfigAction): ChartConfig {
   switch (action.type) {
-    case 'SET_CHART_TYPE':
-      return { ...state, chartType: action.payload }
+    case 'SET_CHART_TYPE': {
+      const next = { ...state, chartType: action.payload }
+      // Seed combo with 1 bar + 1 line if arrays are empty
+      if (action.payload === 'combo') {
+        if (next.barSeries.length === 0) {
+          next.barSeries = [makeBarSeries('series1', 'Bar 1', PALETTE[0])]
+        }
+        if (next.lineSeries.length === 0) {
+          next.lineSeries = [makeLineSeries('series2', 'Line 1', PALETTE[1])]
+        }
+      }
+      return next
+    }
 
     case 'LOAD_CONFIG':
       return action.payload

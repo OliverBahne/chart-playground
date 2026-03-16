@@ -1,9 +1,11 @@
+import { useState, useCallback } from 'react'
 import {
   LineChart, Line,
   BarChart, Bar,
   AreaChart, Area,
   PieChart, Pie, Cell,
   ScatterChart, Scatter,
+  ComposedChart,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer, Brush,
   ReferenceLine, ReferenceArea,
@@ -61,12 +63,45 @@ function buildAxisProps(axis: AxisConfig, isX: boolean) {
   }
 }
 
+function CustomTooltipContent({ active, payload, label, config }: any) {
+  const t: TooltipConfig = config
+  if (!active || !payload?.length) return null
+  return (
+    <div
+      style={{
+        backgroundColor: t.backgroundColor,
+        border: `1px solid ${t.borderColor}`,
+        borderRadius: t.borderRadius,
+        padding: '8px 12px',
+        fontSize: t.fontSize,
+        color: t.fontColor,
+      }}
+    >
+      <div style={{ fontSize: t.labelFontSize, color: t.labelColor, marginBottom: 4 }}>{label}</div>
+      {payload.map((entry: any, i: number) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '2px 0' }}>
+          <span
+            style={{
+              display: 'inline-block',
+              width: 10,
+              height: 10,
+              borderRadius: 2,
+              backgroundColor: entry.color,
+              flexShrink: 0,
+            }}
+          />
+          <span>{entry.name}{t.separator}{entry.value}{entry.unit ?? ''}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function buildTooltipProps(t: TooltipConfig) {
   if (!t.show) return null
   return {
     trigger: t.trigger,
     shared: t.shared,
-    separator: t.separator,
     offset: t.offset,
     filterNull: t.filterNull,
     cursor: t.cursor ? { stroke: t.cursorStroke, strokeDasharray: t.cursorStrokeDasharray } : false,
@@ -75,21 +110,7 @@ function buildTooltipProps(t: TooltipConfig) {
     isAnimationActive: true,
     animationDuration: t.animationDuration,
     animationEasing: t.animationEasing,
-    contentStyle: {
-      backgroundColor: t.backgroundColor,
-      borderColor: t.borderColor,
-      borderRadius: t.borderRadius,
-      fontSize: t.fontSize,
-      color: t.fontColor,
-    },
-    labelStyle: {
-      fontSize: t.labelFontSize,
-      color: t.labelColor,
-    },
-    itemStyle: {
-      fontSize: t.fontSize,
-      color: t.fontColor,
-    },
+    content: <CustomTooltipContent config={t} />,
   }
 }
 
@@ -104,6 +125,7 @@ function buildLegendProps(l: LegendConfig) {
     wrapperStyle: {
       fontSize: l.fontSize,
       color: l.fontColor,
+      cursor: 'pointer',
     },
   }
 }
@@ -142,6 +164,12 @@ function getSeriesKeys(config: ChartConfig): string[] {
     case 'line': return config.lineSeries.map(s => s.dataKey)
     case 'area': return config.areaSeries.map(s => s.dataKey)
     case 'bar': return config.barSeries.map(s => s.dataKey)
+    case 'combo': {
+      const keys = new Set<string>()
+      config.barSeries.forEach(s => keys.add(s.dataKey))
+      config.lineSeries.forEach(s => keys.add(s.dataKey))
+      return [...keys]
+    }
     default: return []
   }
 }
@@ -151,10 +179,24 @@ export function ChartRenderer({ config }: ChartRendererProps) {
   const { margin, xAxis, yAxis, tooltip, legend, grid, brush, referenceLines, referenceAreas } = config
   const anim = config.animationEnabled
 
+  const [hiddenSeries, setHiddenSeries] = useState<Set<string>>(new Set())
+  const handleLegendClick = useCallback((entry: { dataKey?: string; value?: string }) => {
+    const key = entry.dataKey ?? entry.value ?? ''
+    if (!key) return
+    setHiddenSeries((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }, [])
+
+  const isHidden = (key: string) => hiddenSeries.has(key)
+
   const xAxisProps = buildAxisProps(xAxis, true)
   const yAxisProps = buildAxisProps(yAxis, false)
   const tooltipEl = tooltip.show ? <Tooltip {...buildTooltipProps(tooltip)!} /> : null
-  const legendEl = legend.show ? <Legend {...buildLegendProps(legend)!} /> : null
+  const legendEl = legend.show ? <Legend {...buildLegendProps(legend)!} onClick={handleLegendClick} /> : null
   const gridEl = buildGridElement(grid)
   const brushEl = buildBrushElement(brush)
 
@@ -245,7 +287,7 @@ export function ChartRenderer({ config }: ChartRendererProps) {
               fill={s.color}
               shape={s.shape}
               line={s.showLine ? { type: s.lineJointType, strokeWidth: 1 } : false}
-              hide={s.hide}
+              hide={s.hide || isHidden(s.name)}
               legendType={s.legendType === 'none' ? undefined : s.legendType}
               isAnimationActive={anim}
               animationBegin={s.animationBegin}
@@ -262,6 +304,7 @@ export function ChartRenderer({ config }: ChartRendererProps) {
   // ── BAR ──
   if (config.chartType === 'bar') {
     const cl = config.chartLayout
+    const isVerticalLayout = cl.layout === 'vertical'
     return (
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
@@ -276,8 +319,8 @@ export function ChartRenderer({ config }: ChartRendererProps) {
           reverseStackOrder={cl.reverseStackOrder}
         >
           {gridEl}
-          {xAxisProps && <XAxis {...xAxisProps} />}
-          {yAxisProps && <YAxis {...yAxisProps} />}
+          {xAxisProps && <XAxis {...xAxisProps} {...(isVerticalLayout ? { type: 'number', dataKey: undefined } : {})} />}
+          {yAxisProps && <YAxis {...yAxisProps} {...(isVerticalLayout ? { type: 'category', dataKey: xAxis.dataKey || 'name' } : {})} />}
           {tooltipEl}
           {legendEl}
           {brushEl}
@@ -297,7 +340,7 @@ export function ChartRenderer({ config }: ChartRendererProps) {
               radius={s.radius}
               stackId={s.stackId || undefined}
               background={s.showBackground ? { fill: s.backgroundFill, radius: s.backgroundRadius } : undefined}
-              hide={s.hide}
+              hide={s.hide || isHidden(s.dataKey)}
               legendType={s.legendType === 'none' ? undefined : s.legendType}
               unit={s.unit || undefined}
               isAnimationActive={anim}
@@ -344,7 +387,7 @@ export function ChartRenderer({ config }: ChartRendererProps) {
               fillOpacity={s.fillOpacity}
               stackId={s.stackId || undefined}
               connectNulls={s.connectNulls}
-              hide={s.hide}
+              hide={s.hide || isHidden(s.dataKey)}
               dot={s.showDots ? { r: s.dotSize, fill: s.dotFill, stroke: s.dotStroke, strokeWidth: s.dotStrokeWidth } : false}
               activeDot={s.showActiveDot ? { r: s.activeDotSize } : false}
               legendType={s.legendType === 'none' ? undefined : s.legendType}
@@ -357,6 +400,80 @@ export function ChartRenderer({ config }: ChartRendererProps) {
             />
           ))}
         </AreaChart>
+      </ResponsiveContainer>
+    )
+  }
+
+  // ── COMBO ──
+  if (config.chartType === 'combo') {
+    const cl = config.chartLayout
+    const isVerticalLayout = cl.layout === 'vertical'
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <ComposedChart
+          data={data}
+          margin={margin}
+          layout={cl.layout}
+          barGap={cl.barGap}
+          barCategoryGap={cl.barCategoryGap}
+          barSize={cl.barSize}
+          maxBarSize={cl.maxBarSize}
+        >
+          {gridEl}
+          {xAxisProps && <XAxis {...xAxisProps} {...(isVerticalLayout ? { type: 'number', dataKey: undefined } : {})} />}
+          {yAxisProps && <YAxis {...yAxisProps} {...(isVerticalLayout ? { type: 'category', dataKey: xAxis.dataKey || 'name' } : {})} />}
+          {tooltipEl}
+          {legendEl}
+          {brushEl}
+          {refLineEls}
+          {refAreaEls}
+          {config.barSeries.map((s) => (
+            <Bar
+              key={`bar-${s.dataKey}`}
+              dataKey={s.dataKey}
+              name={s.name}
+              fill={s.color}
+              stroke={s.strokeColor !== 'none' ? s.strokeColor : undefined}
+              strokeWidth={s.strokeWidth}
+              barSize={s.barSize}
+              maxBarSize={s.maxBarSize}
+              minPointSize={s.minPointSize}
+              radius={s.radius}
+              stackId={s.stackId || undefined}
+              background={s.showBackground ? { fill: s.backgroundFill, radius: s.backgroundRadius } : undefined}
+              hide={s.hide || isHidden(s.dataKey)}
+              legendType={s.legendType === 'none' ? undefined : s.legendType}
+              unit={s.unit || undefined}
+              isAnimationActive={anim}
+              animationBegin={s.animationBegin}
+              animationDuration={s.animationDuration}
+              animationEasing={s.animationEasing}
+              label={s.showLabel ? { position: s.labelPosition, fontSize: s.labelFontSize, fill: s.labelColor } : false}
+            />
+          ))}
+          {config.lineSeries.map((s) => (
+            <Line
+              key={`line-${s.dataKey}`}
+              type={s.type}
+              dataKey={s.dataKey}
+              name={s.name}
+              stroke={s.color}
+              strokeWidth={s.strokeWidth}
+              strokeDasharray={s.strokeDasharray || undefined}
+              connectNulls={s.connectNulls}
+              hide={s.hide || isHidden(s.dataKey)}
+              dot={s.showDots ? { r: s.dotSize, fill: s.dotFill, stroke: s.dotStroke, strokeWidth: s.dotStrokeWidth } : false}
+              activeDot={s.showActiveDot ? { r: s.activeDotSize } : false}
+              legendType={s.legendType === 'none' ? undefined : s.legendType}
+              unit={s.unit || undefined}
+              isAnimationActive={anim}
+              animationBegin={s.animationBegin}
+              animationDuration={s.animationDuration}
+              animationEasing={s.animationEasing}
+              label={s.showLabel ? { position: s.labelPosition, fontSize: s.labelFontSize } : false}
+            />
+          ))}
+        </ComposedChart>
       </ResponsiveContainer>
     )
   }
@@ -388,7 +505,7 @@ export function ChartRenderer({ config }: ChartRendererProps) {
             strokeWidth={s.strokeWidth}
             strokeDasharray={s.strokeDasharray || undefined}
             connectNulls={s.connectNulls}
-            hide={s.hide}
+            hide={s.hide || isHidden(s.dataKey)}
             dot={s.showDots ? { r: s.dotSize, fill: s.dotFill, stroke: s.dotStroke, strokeWidth: s.dotStrokeWidth } : false}
             activeDot={s.showActiveDot ? { r: s.activeDotSize } : false}
             legendType={s.legendType === 'none' ? undefined : s.legendType}

@@ -13,8 +13,10 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
   const hasFixedWidth = chartWidth > 0
   const containerRef = useRef<HTMLDivElement>(null)
 
+  type Edge = 'right' | 'left' | 'bottom' | 'top'
+
   const startDrag = useCallback(
-    (edge: 'right' | 'bottom' | 'corner') => (e: React.MouseEvent) => {
+    (edge: Edge) => (e: React.MouseEvent) => {
       e.preventDefault()
       const el = containerRef.current
       if (!el) return
@@ -24,14 +26,20 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
       const startW = el.offsetWidth
       const startH = el.offsetHeight
 
+      const resizeH = edge === 'right' || edge === 'left'
+      const resizeV = edge === 'bottom' || edge === 'top'
+      const invertH = edge === 'left'
+      const invertV = edge === 'top'
+
       const onMove = (ev: MouseEvent) => {
-        if (edge === 'right' || edge === 'corner') {
-          const newW = Math.max(200, startW + (ev.clientX - startX))
-          // Subtract padding (48px = p-6 * 2) to get chart content width
+        const dx = ev.clientX - startX
+        const dy = ev.clientY - startY
+        if (resizeH) {
+          const newW = Math.max(200, startW + (invertH ? -dx : dx))
           update('chartWidth', Math.round(newW - 48))
         }
-        if (edge === 'bottom' || edge === 'corner') {
-          const newH = Math.max(150, startH + (ev.clientY - startY))
+        if (resizeV) {
+          const newH = Math.max(150, startH + (invertV ? -dy : dy))
           update('chartHeight', Math.round(newH - 48))
         }
       }
@@ -43,8 +51,11 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
         document.body.style.userSelect = ''
       }
 
-      document.body.style.cursor =
-        edge === 'corner' ? 'nwse-resize' : edge === 'right' ? 'ew-resize' : 'ns-resize'
+      const cursors: Record<Edge, string> = {
+        right: 'ew-resize', left: 'ew-resize',
+        bottom: 'ns-resize', top: 'ns-resize',
+      }
+      document.body.style.cursor = cursors[edge]
       document.body.style.userSelect = 'none'
       document.addEventListener('mousemove', onMove)
       document.addEventListener('mouseup', onUp)
@@ -70,28 +81,18 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
             <ChartRenderer config={config} />
           </div>
 
-          {/* Right edge handle */}
-          <div
-            className="absolute top-0 -right-1.5 w-3 h-full cursor-ew-resize group flex items-center justify-center"
-            onMouseDown={startDrag('right')}
-          >
+          {/* Edge handles */}
+          <div className="absolute top-0 -right-1.5 w-3 h-full cursor-ew-resize group flex items-center justify-center" onMouseDown={startDrag('right')}>
             <div className="w-0.5 h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary transition-colors" />
           </div>
-
-          {/* Bottom edge handle */}
-          <div
-            className="absolute -bottom-1.5 left-0 h-3 w-full cursor-ns-resize group flex items-center justify-center"
-            onMouseDown={startDrag('bottom')}
-          >
+          <div className="absolute top-0 -left-1.5 w-3 h-full cursor-ew-resize group flex items-center justify-center" onMouseDown={startDrag('left')}>
+            <div className="w-0.5 h-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary transition-colors" />
+          </div>
+          <div className="absolute -bottom-1.5 left-0 h-3 w-full cursor-ns-resize group flex items-center justify-center" onMouseDown={startDrag('bottom')}>
             <div className="h-0.5 w-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary transition-colors" />
           </div>
-
-          {/* Corner handle */}
-          <div
-            className="absolute -bottom-1.5 -right-1.5 w-3 h-3 cursor-nwse-resize group flex items-center justify-center"
-            onMouseDown={startDrag('corner')}
-          >
-            <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30 group-hover:bg-primary transition-colors" />
+          <div className="absolute -top-1.5 left-0 h-3 w-full cursor-ns-resize group flex items-center justify-center" onMouseDown={startDrag('top')}>
+            <div className="h-0.5 w-8 rounded-full bg-muted-foreground/30 group-hover:bg-primary transition-colors" />
           </div>
         </div>
       </div>

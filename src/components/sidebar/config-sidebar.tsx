@@ -43,7 +43,8 @@ export function ConfigSidebar({
   const ct = config.chartType
   const isPie = ct === 'pie'
   const isScatter = ct === 'scatter'
-  const showSeries = ct === 'line' || ct === 'bar' || ct === 'area'
+  const isCombo = ct === 'combo'
+  const showSeries = ct === 'line' || ct === 'bar' || ct === 'area' || isCombo
 
   return (
     <ScrollArea className="h-full">
@@ -63,7 +64,7 @@ export function ConfigSidebar({
 
         <MarginControl config={config} update={update} />
 
-        {ct === 'bar' && (
+        {(ct === 'bar' || isCombo) && (
           <ChartLayoutControls config={config} update={update} />
         )}
 
