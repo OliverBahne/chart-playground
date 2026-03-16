@@ -8,7 +8,7 @@ import {
   ResponsiveContainer, Brush,
   ReferenceLine, ReferenceArea,
 } from 'recharts'
-import type { ChartConfig, AxisConfig, TooltipConfig, LegendConfig, GridConfig, BrushConfig } from '@/types/chart-config'
+import type { ChartConfig, AxisConfig, TooltipConfig, LegendConfig, GridConfig, BrushConfig, LabelPosition } from '@/types/chart-config'
 import { getSampleData } from '@/data/sample-data'
 
 interface ChartRendererProps {
@@ -52,7 +52,7 @@ function buildAxisProps(axis: AxisConfig, isX: boolean) {
     label: axis.label
       ? {
           value: axis.label,
-          position: axis.labelPosition || (isX ? 'insideBottom' : 'insideLeft'),
+          position: (axis.labelPosition || (isX ? 'insideBottom' : 'insideLeft')) as LabelPosition,
           fontSize: axis.labelFontSize,
           angle: isX ? 0 : -90,
           offset: isX ? -5 : 10,
@@ -147,7 +147,7 @@ function getSeriesKeys(config: ChartConfig): string[] {
 }
 
 export function ChartRenderer({ config }: ChartRendererProps) {
-  const data = getSampleData(config.chartType, getSeriesKeys(config))
+  const data = getSampleData(config.chartType, getSeriesKeys(config)) as any
   const { margin, xAxis, yAxis, tooltip, legend, grid, brush, referenceLines, referenceAreas } = config
   const anim = config.animationEnabled
 

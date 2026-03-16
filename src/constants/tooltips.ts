@@ -57,7 +57,7 @@ export const TIPS: Record<string, string> = {
   'Joint Type': 'Curve interpolation of the connecting line.',
 
   // Axis
-  'Data Key': 'Data field mapped to this axis.',
+  // (Data Key reused from Series section above)
   Type: 'Axis data type: category (labels) or number (values).',
   Orient: 'Which side of the chart the axis appears on.',
   Label: 'Text label displayed alongside the axis.',
@@ -84,7 +84,7 @@ export const TIPS: Record<string, string> = {
   Horizontal: 'Show horizontal grid lines.',
   Vertical: 'Show vertical grid lines.',
   'Sync Ticks': 'Align grid lines with axis ticks.',
-  'Fill Opacity': 'Opacity of the grid background fill.',
+  // (Fill Opacity reused from Area section above)
 
   // Tooltip
   Trigger: 'How the tooltip is activated: hover or click.',
@@ -102,7 +102,7 @@ export const TIPS: Record<string, string> = {
   'Font Size': 'Font size of tooltip content.',
   'Font Color': 'Text color of tooltip content.',
   'Label Font': 'Font size of the tooltip header label.',
-  'Label Color': 'Color of the tooltip header label.',
+  // (Label Color reused from Series section above)
   'Escape X': 'Allow tooltip to extend beyond chart on X axis.',
   'Escape Y': 'Allow tooltip to extend beyond chart on Y axis.',
 
@@ -112,7 +112,7 @@ export const TIPS: Record<string, string> = {
   'V Align': 'Vertical alignment of the legend.',
   'Icon Size': 'Size of legend icons in px.',
   'Icon Type': 'Shape of the legend icons.',
-  'Font Color': 'Text color of legend labels.',
+  // (Font Color reused from Tooltip section above)
   'Inactive': 'Color of disabled/inactive legend items.',
 
   // Chart Layout

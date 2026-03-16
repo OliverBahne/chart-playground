@@ -107,7 +107,7 @@ function configReducer(state: ChartConfig, action: ConfigAction): ChartConfig {
             strokeWidth: 1,
             strokeDasharray: '5 5',
             label: 'Ref',
-            labelPosition: 'insideTopRight',
+            labelPosition: 'insideRight',
             ifOverflow: 'extendDomain',
           },
         ],
