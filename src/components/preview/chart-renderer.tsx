@@ -180,8 +180,8 @@ export function ChartRenderer({ config }: ChartRendererProps) {
   const anim = config.animationEnabled
 
   const [hiddenSeries, setHiddenSeries] = useState<Set<string>>(new Set())
-  const handleLegendClick = useCallback((entry: { dataKey?: string; value?: string }) => {
-    const key = entry.dataKey ?? entry.value ?? ''
+  const handleLegendClick = useCallback((entry: { dataKey?: string | number | ((obj: any) => any); value?: string }) => {
+    const key = String(entry.dataKey ?? entry.value ?? '')
     if (!key) return
     setHiddenSeries((prev) => {
       const next = new Set(prev)
