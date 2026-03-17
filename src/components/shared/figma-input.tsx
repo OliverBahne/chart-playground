@@ -33,17 +33,19 @@ interface FigmaNumberInputProps {
   max?: number
   step?: number
   tooltip?: string
+  placeholder?: string
   disabled?: boolean
   disabledReason?: string
 }
 
-export function FigmaNumberInput({ label, value, onChange, min, max, step = 1, tooltip, disabled, disabledReason }: FigmaNumberInputProps) {
+export function FigmaNumberInput({ label, value, onChange, min, max, step = 1, tooltip, placeholder, disabled, disabledReason }: FigmaNumberInputProps) {
+  const displayValue = value != null && !isNaN(value) ? value : ''
   return (
     <div className={`flex items-center gap-2 h-7${disabled ? ' opacity-40 pointer-events-none' : ''}`}>
       <SettingLabel label={label} tooltip={tooltip} disabledReason={disabledReason} />
       <input
         type="number"
-        value={value}
+        value={displayValue}
         onChange={(e) => {
           let v = parseFloat(e.target.value)
           if (isNaN(v)) return
@@ -54,6 +56,7 @@ export function FigmaNumberInput({ label, value, onChange, min, max, step = 1, t
         min={min}
         max={max}
         step={step}
+        placeholder={placeholder}
         disabled={disabled}
         className="figma-input flex-1 min-w-0 tabular-nums text-right"
       />

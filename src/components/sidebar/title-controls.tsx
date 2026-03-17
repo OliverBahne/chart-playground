@@ -40,13 +40,13 @@ export function TitleControls({ config, update }: TitleControlsProps) {
       <FigmaTextInput label="Title" value={t.text} onChange={(v) => { update('title.text', v); if (v && !t.show) update('title.show', true) }} placeholder="Chart title" />
       <FigmaNumberInput label="Size" tooltip={TIPS['Font Size']} value={t.fontSize} onChange={(v) => update('title.fontSize', v)} min={10} max={36} />
       <FigmaSelect label="Weight" value={String(t.fontWeight)} options={weightOptions} onChange={(v) => update('title.fontWeight', Number(v))} />
-      <FigmaNumberInput label="Line Height" value={t.lineHeight} onChange={(v) => update('title.lineHeight', v)} min={0.8} max={3} step={0.1} />
+      <FigmaNumberInput label="Line Height" value={t.lineHeight ?? 1.3} onChange={(v) => update('title.lineHeight', v)} min={0.8} max={3} step={0.1} />
       <FigmaColor label="Color" tooltip={TIPS['Font Color']} color={t.fontColor} onChange={(v) => update('title.fontColor', v)} />
       <FigmaSelect label="Align" tooltip={TIPS['Align']} value={t.align} options={alignOptions} onChange={(v) => update('title.align', v)} />
       <FigmaTextInput label="Subtitle" value={t.subtitle} onChange={(v) => { update('title.subtitle', v); if (v && !t.show) update('title.show', true) }} placeholder="Subtitle" />
       <FigmaNumberInput label="Sub Size" tooltip={TIPS['Font Size']} value={t.subtitleFontSize} onChange={(v) => update('title.subtitleFontSize', v)} min={8} max={24} />
       <FigmaSelect label="Sub Weight" value={String(t.subtitleFontWeight)} options={weightOptions} onChange={(v) => update('title.subtitleFontWeight', Number(v))} />
-      <FigmaNumberInput label="Sub Line H" value={t.subtitleLineHeight} onChange={(v) => update('title.subtitleLineHeight', v)} min={0.8} max={3} step={0.1} />
+      <FigmaNumberInput label="Sub Line H" value={t.subtitleLineHeight ?? 1.3} onChange={(v) => update('title.subtitleLineHeight', v)} min={0.8} max={3} step={0.1} />
       <FigmaColor label="Sub Color" tooltip={TIPS['Font Color']} color={t.subtitleFontColor} onChange={(v) => update('title.subtitleFontColor', v)} />
     </FigmaSection>
   )
