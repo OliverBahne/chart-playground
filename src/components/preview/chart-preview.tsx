@@ -1,6 +1,8 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import { Download } from 'lucide-react'
 import { ChartRenderer } from './chart-renderer'
 import { ConfigCodeView } from './config-code-view'
+import { useChartExport } from '@/hooks/use-chart-export'
 import type { ChartConfig } from '@/types/chart-config'
 
 interface ChartPreviewProps {
@@ -12,6 +14,9 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
   const { chartWidth, chartHeight } = config
   const hasFixedWidth = chartWidth > 0
   const containerRef = useRef<HTMLDivElement>(null)
+  const chartRef = useRef<HTMLDivElement>(null)
+  const { exportSvg, exportPng } = useChartExport(chartRef)
+  const [exportOpen, setExportOpen] = useState(false)
 
   type Edge = 'right' | 'left' | 'bottom' | 'top'
 
@@ -65,7 +70,40 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
+      <div className="flex-1 flex items-center justify-center p-8 overflow-auto relative">
+        {/* Export button — top-left */}
+        <div className="absolute top-4 left-4 z-10">
+          <div className="relative">
+            <button
+              onClick={() => setExportOpen((v) => !v)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-secondary hover:bg-secondary/80 border border-border text-xs text-muted-foreground hover:text-foreground transition-colors"
+              title="Export chart"
+            >
+              <Download className="h-3.5 w-3.5" />
+              <span>Export</span>
+            </button>
+            {exportOpen && (
+              <>
+                <div className="fixed inset-0" onClick={() => setExportOpen(false)} />
+                <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg py-1 min-w-[120px] z-50">
+                  <button
+                    className="w-full text-left px-3 py-1.5 text-xs text-popover-foreground hover:bg-accent transition-colors"
+                    onClick={() => { exportPng(); setExportOpen(false) }}
+                  >
+                    Export as PNG
+                  </button>
+                  <button
+                    className="w-full text-left px-3 py-1.5 text-xs text-popover-foreground hover:bg-accent transition-colors"
+                    onClick={() => { exportSvg(); setExportOpen(false) }}
+                  >
+                    Export as SVG
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
         <div
           className="relative"
           style={{
@@ -74,7 +112,7 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
           }}
         >
           <div
-            ref={containerRef}
+            ref={(el) => { containerRef.current = el; chartRef.current = el }}
             className="bg-card rounded-lg p-6 border border-border w-full"
             style={{ height: chartHeight + 48 }}
           >
