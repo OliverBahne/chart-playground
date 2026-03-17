@@ -113,11 +113,11 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
         >
           <div
             ref={(el) => { containerRef.current = el; chartRef.current = el }}
-            className="bg-card rounded-lg p-6 border border-border w-full"
+            className="bg-card rounded-lg p-6 border border-border w-full flex flex-col"
             style={{ height: chartHeight + 48 }}
           >
             {config.title.show && (config.title.text || config.title.subtitle) && (
-              <div style={{ textAlign: config.title.align, paddingBottom: 8 }}>
+              <div className="shrink-0" style={{ textAlign: config.title.align, paddingBottom: 8 }}>
                 {config.title.text && (
                   <div style={{ fontSize: config.title.fontSize, color: config.title.fontColor, fontWeight: 600, lineHeight: 1.3 }}>
                     {config.title.text}
@@ -130,7 +130,7 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
                 )}
               </div>
             )}
-            <div style={{ flex: 1, minHeight: 0, height: '100%' }}>
+            <div className="flex-1 min-h-0">
               <ChartRenderer config={config} />
             </div>
           </div>
