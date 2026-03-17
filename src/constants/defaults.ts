@@ -94,11 +94,13 @@ export const DEFAULT_CONFIG: ChartConfig = {
     text: '',
     fontSize: 18,
     fontWeight: 600,
+    lineHeight: 1.3,
     fontColor: '#e5e5e5',
     align: 'left',
     subtitle: '',
     subtitleFontSize: 13,
     subtitleFontWeight: 400,
+    subtitleLineHeight: 1.3,
     subtitleFontColor: '#999',
   },
 

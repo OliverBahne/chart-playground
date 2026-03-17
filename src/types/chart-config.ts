@@ -308,11 +308,13 @@ export interface TitleConfig {
   text: string
   fontSize: number
   fontWeight: FontWeight
+  lineHeight: number
   fontColor: string
   align: 'left' | 'center' | 'right'
   subtitle: string
   subtitleFontSize: number
   subtitleFontWeight: FontWeight
+  subtitleLineHeight: number
   subtitleFontColor: string
 }
 
