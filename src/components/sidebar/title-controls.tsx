@@ -16,6 +16,18 @@ const alignOptions = [
   { value: 'right', label: 'Right' },
 ]
 
+const weightOptions = [
+  { value: '100', label: '100 — Thin' },
+  { value: '200', label: '200 — Extra Light' },
+  { value: '300', label: '300 — Light' },
+  { value: '400', label: '400 — Regular' },
+  { value: '500', label: '500 — Medium' },
+  { value: '600', label: '600 — Semi Bold' },
+  { value: '700', label: '700 — Bold' },
+  { value: '800', label: '800 — Extra Bold' },
+  { value: '900', label: '900 — Black' },
+]
+
 export function TitleControls({ config, update }: TitleControlsProps) {
   const t = config.title
 
@@ -27,10 +39,12 @@ export function TitleControls({ config, update }: TitleControlsProps) {
     >
       <FigmaTextInput label="Title" value={t.text} onChange={(v) => update('title.text', v)} placeholder="Chart title" />
       <FigmaNumberInput label="Size" tooltip={TIPS['Font Size']} value={t.fontSize} onChange={(v) => update('title.fontSize', v)} min={10} max={36} />
+      <FigmaSelect label="Weight" value={String(t.fontWeight)} options={weightOptions} onChange={(v) => update('title.fontWeight', Number(v))} />
       <FigmaColor label="Color" tooltip={TIPS['Font Color']} color={t.fontColor} onChange={(v) => update('title.fontColor', v)} />
       <FigmaSelect label="Align" tooltip={TIPS['Align']} value={t.align} options={alignOptions} onChange={(v) => update('title.align', v)} />
       <FigmaTextInput label="Subtitle" value={t.subtitle} onChange={(v) => update('title.subtitle', v)} placeholder="Subtitle" />
       <FigmaNumberInput label="Sub Size" tooltip={TIPS['Font Size']} value={t.subtitleFontSize} onChange={(v) => update('title.subtitleFontSize', v)} min={8} max={24} />
+      <FigmaSelect label="Sub Weight" value={String(t.subtitleFontWeight)} options={weightOptions} onChange={(v) => update('title.subtitleFontWeight', Number(v))} />
       <FigmaColor label="Sub Color" tooltip={TIPS['Font Color']} color={t.subtitleFontColor} onChange={(v) => update('title.subtitleFontColor', v)} />
     </FigmaSection>
   )

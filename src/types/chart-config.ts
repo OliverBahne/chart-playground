@@ -301,14 +301,18 @@ export interface ChartLayoutConfig {
 }
 
 // ─── Title ───
+export type FontWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
+
 export interface TitleConfig {
   show: boolean
   text: string
   fontSize: number
+  fontWeight: FontWeight
   fontColor: string
   align: 'left' | 'center' | 'right'
   subtitle: string
   subtitleFontSize: number
+  subtitleFontWeight: FontWeight
   subtitleFontColor: string
 }
 
