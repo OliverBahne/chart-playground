@@ -85,7 +85,7 @@ export function makeScatterSeries(name: string, color: string): ScatterSeriesCon
 
 export const DEFAULT_CONFIG: ChartConfig = {
   chartType: 'line',
-  chartWidth: 0,
+  chartWidth: 920,
   chartHeight: 400,
   margin: { top: 20, right: 30, bottom: 20, left: 30 },
   animationEnabled: false,

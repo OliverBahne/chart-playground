@@ -15,7 +15,6 @@ export function MarginControl({ config, update }: MarginControlProps) {
         <FigmaNumberInput label="Width" tooltip={TIPS['Width']} value={config.chartWidth} onChange={(v) => update('chartWidth', v)} min={0} max={2000} step={10} />
         <FigmaNumberInput label="Height" tooltip={TIPS['Height']} value={config.chartHeight} onChange={(v) => update('chartHeight', v)} min={100} max={2000} step={10} />
       </div>
-      <span className="text-[10px] text-muted-foreground">Width 0 = 100% responsive</span>
       <div className="grid grid-cols-2 gap-x-3 gap-y-1 mt-1">
         <FigmaNumberInput label="Top" tooltip={TIPS['Top']} value={config.margin.top} onChange={(v) => update('margin.top', v)} min={0} max={200} />
         <FigmaNumberInput label="Right" tooltip={TIPS['Right']} value={config.margin.right} onChange={(v) => update('margin.right', v)} min={0} max={200} />
