@@ -2,7 +2,6 @@ import { FigmaSection } from '@/components/shared/figma-section'
 import { FigmaSelect } from '@/components/shared/figma-select'
 import { FigmaTextInput, FigmaNumberInput } from '@/components/shared/figma-input'
 import { FigmaColor } from '@/components/shared/figma-color'
-import { LabeledSlider } from '@/components/shared/labeled-slider'
 import { LabeledSwitch } from '@/components/shared/labeled-switch'
 import { TIPS } from '@/constants/tooltips'
 import type { ChartConfig, CurveType, LabelPosition, LegendIconType, AnimationEasing } from '@/types/chart-config'
@@ -128,27 +127,27 @@ type SectionProps = Pick<SeriesControlsProps, 'config' | 'updateSeries' | 'dispa
 function LineSeriesSection({ config, updateSeries, dispatch }: SectionProps) {
   const seriesType = 'lineSeries'
   return (
-    <FigmaSection title="Line Series" onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
+    <FigmaSection title="Line Series" defaultOpen={false} onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
       {config.lineSeries.map((s, i) => (
         <FigmaSection key={`${s.dataKey}-${i}`} title={s.name || s.dataKey} defaultOpen={i === 0}>
           <FigmaColor label="Color" tooltip={TIPS['Color']} color={s.color} onChange={(v) => updateSeries(seriesType, i, 'color', v)} />
           <FigmaTextInput label="Name" tooltip={TIPS['Name']} value={s.name} onChange={(v) => updateSeries(seriesType, i, 'name', v)} />
           <FigmaTextInput label="Data Key" tooltip={TIPS['Data Key']} value={s.dataKey} onChange={(v) => updateSeries(seriesType, i, 'dataKey', v)} />
           <FigmaSelect label="Curve" tooltip={TIPS['Curve']} value={s.type} options={curveOptions} onChange={(v) => updateSeries(seriesType, i, 'type', v)} />
-          <LabeledSlider label="Stroke W" tooltip={TIPS['Stroke W']} value={s.strokeWidth} min={0} max={8} onValueChange={(v) => updateSeries(seriesType, i, 'strokeWidth', v)} />
+          <FigmaNumberInput label="Stroke W" tooltip={TIPS['Stroke W']} value={s.strokeWidth} min={0} max={8} onChange={(v) => updateSeries(seriesType, i, 'strokeWidth', v)} />
           <FigmaTextInput label="Dash" tooltip={TIPS['Dash']} value={s.strokeDasharray} onChange={(v) => updateSeries(seriesType, i, 'strokeDasharray', v)} placeholder="5 5" />
           <LabeledSwitch label="Show Dots" tooltip={TIPS['Show Dots']} checked={s.showDots} onCheckedChange={(v) => updateSeries(seriesType, i, 'showDots', v)} />
-          <LabeledSlider label="Dot Size" tooltip={TIPS['Dot Size']} value={s.dotSize} min={0} max={12} onValueChange={(v) => updateSeries(seriesType, i, 'dotSize', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
+          <FigmaNumberInput label="Dot Size" tooltip={TIPS['Dot Size']} value={s.dotSize} min={0} max={12} onChange={(v) => updateSeries(seriesType, i, 'dotSize', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
           <FigmaColor label="Dot Fill" tooltip={TIPS['Dot Fill']} color={s.dotFill} onChange={(v) => updateSeries(seriesType, i, 'dotFill', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
           <FigmaColor label="Dot Stroke" tooltip={TIPS['Dot Stroke']} color={s.dotStroke} onChange={(v) => updateSeries(seriesType, i, 'dotStroke', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
-          <LabeledSlider label="Dot Stroke W" tooltip={TIPS['Dot Stroke W']} value={s.dotStrokeWidth} min={0} max={4} onValueChange={(v) => updateSeries(seriesType, i, 'dotStrokeWidth', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
+          <FigmaNumberInput label="Dot Stroke W" tooltip={TIPS['Dot Stroke W']} value={s.dotStrokeWidth} min={0} max={4} onChange={(v) => updateSeries(seriesType, i, 'dotStrokeWidth', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
           <LabeledSwitch label="Active Dot" tooltip={TIPS['Active Dot']} checked={s.showActiveDot} onCheckedChange={(v) => updateSeries(seriesType, i, 'showActiveDot', v)} />
-          <LabeledSlider label="Active Dot Size" tooltip={TIPS['Active Dot Size']} value={s.activeDotSize} min={0} max={12} onValueChange={(v) => updateSeries(seriesType, i, 'activeDotSize', v)} disabled={!s.showActiveDot} disabledReason='Enable "Active Dot" first' />
+          <FigmaNumberInput label="Active Dot Size" tooltip={TIPS['Active Dot Size']} value={s.activeDotSize} min={0} max={12} onChange={(v) => updateSeries(seriesType, i, 'activeDotSize', v)} disabled={!s.showActiveDot} disabledReason='Enable "Active Dot" first' />
           <LabeledSwitch label="Connect Nulls" tooltip={TIPS['Connect Nulls']} checked={s.connectNulls} onCheckedChange={(v) => updateSeries(seriesType, i, 'connectNulls', v)} />
           <LabeledSwitch label="Hide" tooltip={TIPS['Hide']} checked={s.hide} onCheckedChange={(v) => updateSeries(seriesType, i, 'hide', v)} />
           <LabeledSwitch label="Show Label" tooltip={TIPS['Show Label']} checked={s.showLabel} onCheckedChange={(v) => updateSeries(seriesType, i, 'showLabel', v)} />
           <FigmaSelect label="Label Pos" tooltip={TIPS['Label Pos']} value={s.labelPosition} options={labelPositionOptions} onChange={(v) => updateSeries(seriesType, i, 'labelPosition', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
-          <LabeledSlider label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onValueChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
+          <FigmaNumberInput label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
           <FigmaSelect label="Legend Icon" tooltip={TIPS['Legend Icon']} value={s.legendType} options={legendTypeOptions} onChange={(v) => updateSeries(seriesType, i, 'legendType', v)} />
           <FigmaTextInput label="Unit" tooltip={TIPS['Unit']} value={s.unit} onChange={(v) => updateSeries(seriesType, i, 'unit', v)} />
           <AnimationFields seriesType={seriesType} index={i} series={s} updateSeries={updateSeries} />
@@ -162,30 +161,30 @@ function LineSeriesSection({ config, updateSeries, dispatch }: SectionProps) {
 function AreaSeriesSection({ config, updateSeries, dispatch }: SectionProps) {
   const seriesType = 'areaSeries'
   return (
-    <FigmaSection title="Area Series" onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
+    <FigmaSection title="Area Series" defaultOpen={false} onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
       {config.areaSeries.map((s, i) => (
         <FigmaSection key={`${s.dataKey}-${i}`} title={s.name || s.dataKey} defaultOpen={i === 0}>
           <FigmaColor label="Color" tooltip={TIPS['Color']} color={s.color} onChange={(v) => updateSeries(seriesType, i, 'color', v)} />
           <FigmaColor label="Fill" tooltip={TIPS['Fill']} color={s.fillColor} onChange={(v) => updateSeries(seriesType, i, 'fillColor', v)} />
-          <LabeledSlider label="Fill Opacity" tooltip={TIPS['Fill Opacity']} value={s.fillOpacity} min={0} max={1} step={0.05} onValueChange={(v) => updateSeries(seriesType, i, 'fillOpacity', v)} />
+          <FigmaNumberInput label="Fill Opacity" tooltip={TIPS['Fill Opacity']} value={s.fillOpacity} min={0} max={1} step={0.05} onChange={(v) => updateSeries(seriesType, i, 'fillOpacity', v)} />
           <FigmaTextInput label="Name" tooltip={TIPS['Name']} value={s.name} onChange={(v) => updateSeries(seriesType, i, 'name', v)} />
           <FigmaTextInput label="Data Key" tooltip={TIPS['Data Key']} value={s.dataKey} onChange={(v) => updateSeries(seriesType, i, 'dataKey', v)} />
           <FigmaSelect label="Curve" tooltip={TIPS['Curve']} value={s.type} options={curveOptions} onChange={(v) => updateSeries(seriesType, i, 'type', v)} />
-          <LabeledSlider label="Stroke W" tooltip={TIPS['Stroke W']} value={s.strokeWidth} min={0} max={8} onValueChange={(v) => updateSeries(seriesType, i, 'strokeWidth', v)} />
+          <FigmaNumberInput label="Stroke W" tooltip={TIPS['Stroke W']} value={s.strokeWidth} min={0} max={8} onChange={(v) => updateSeries(seriesType, i, 'strokeWidth', v)} />
           <FigmaTextInput label="Dash" tooltip={TIPS['Dash']} value={s.strokeDasharray} onChange={(v) => updateSeries(seriesType, i, 'strokeDasharray', v)} placeholder="5 5" />
           <FigmaTextInput label="Stack ID" tooltip={TIPS['Stack ID']} value={s.stackId} onChange={(v) => updateSeries(seriesType, i, 'stackId', v)} />
           <LabeledSwitch label="Show Dots" tooltip={TIPS['Show Dots']} checked={s.showDots} onCheckedChange={(v) => updateSeries(seriesType, i, 'showDots', v)} />
-          <LabeledSlider label="Dot Size" tooltip={TIPS['Dot Size']} value={s.dotSize} min={0} max={12} onValueChange={(v) => updateSeries(seriesType, i, 'dotSize', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
+          <FigmaNumberInput label="Dot Size" tooltip={TIPS['Dot Size']} value={s.dotSize} min={0} max={12} onChange={(v) => updateSeries(seriesType, i, 'dotSize', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
           <FigmaColor label="Dot Fill" tooltip={TIPS['Dot Fill']} color={s.dotFill} onChange={(v) => updateSeries(seriesType, i, 'dotFill', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
           <FigmaColor label="Dot Stroke" tooltip={TIPS['Dot Stroke']} color={s.dotStroke} onChange={(v) => updateSeries(seriesType, i, 'dotStroke', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
-          <LabeledSlider label="Dot Stroke W" tooltip={TIPS['Dot Stroke W']} value={s.dotStrokeWidth} min={0} max={4} onValueChange={(v) => updateSeries(seriesType, i, 'dotStrokeWidth', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
+          <FigmaNumberInput label="Dot Stroke W" tooltip={TIPS['Dot Stroke W']} value={s.dotStrokeWidth} min={0} max={4} onChange={(v) => updateSeries(seriesType, i, 'dotStrokeWidth', v)} disabled={!s.showDots} disabledReason='Enable "Show Dots" first' />
           <LabeledSwitch label="Active Dot" tooltip={TIPS['Active Dot']} checked={s.showActiveDot} onCheckedChange={(v) => updateSeries(seriesType, i, 'showActiveDot', v)} />
-          <LabeledSlider label="Active Dot Size" tooltip={TIPS['Active Dot Size']} value={s.activeDotSize} min={0} max={12} onValueChange={(v) => updateSeries(seriesType, i, 'activeDotSize', v)} disabled={!s.showActiveDot} disabledReason='Enable "Active Dot" first' />
+          <FigmaNumberInput label="Active Dot Size" tooltip={TIPS['Active Dot Size']} value={s.activeDotSize} min={0} max={12} onChange={(v) => updateSeries(seriesType, i, 'activeDotSize', v)} disabled={!s.showActiveDot} disabledReason='Enable "Active Dot" first' />
           <LabeledSwitch label="Connect Nulls" tooltip={TIPS['Connect Nulls']} checked={s.connectNulls} onCheckedChange={(v) => updateSeries(seriesType, i, 'connectNulls', v)} />
           <LabeledSwitch label="Hide" tooltip={TIPS['Hide']} checked={s.hide} onCheckedChange={(v) => updateSeries(seriesType, i, 'hide', v)} />
           <LabeledSwitch label="Show Label" tooltip={TIPS['Show Label']} checked={s.showLabel} onCheckedChange={(v) => updateSeries(seriesType, i, 'showLabel', v)} />
           <FigmaSelect label="Label Pos" tooltip={TIPS['Label Pos']} value={s.labelPosition} options={labelPositionOptions} onChange={(v) => updateSeries(seriesType, i, 'labelPosition', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
-          <LabeledSlider label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onValueChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
+          <FigmaNumberInput label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
           <FigmaSelect label="Legend Icon" tooltip={TIPS['Legend Icon']} value={s.legendType} options={legendTypeOptions} onChange={(v) => updateSeries(seriesType, i, 'legendType', v)} />
           <FigmaTextInput label="Unit" tooltip={TIPS['Unit']} value={s.unit} onChange={(v) => updateSeries(seriesType, i, 'unit', v)} />
           <AnimationFields seriesType={seriesType} index={i} series={s} updateSeries={updateSeries} />
@@ -199,26 +198,26 @@ function AreaSeriesSection({ config, updateSeries, dispatch }: SectionProps) {
 function BarSeriesSection({ config, updateSeries, dispatch }: SectionProps) {
   const seriesType = 'barSeries'
   return (
-    <FigmaSection title="Bar Series" onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
+    <FigmaSection title="Bar Series" defaultOpen={false} onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
       {config.barSeries.map((s, i) => (
         <FigmaSection key={`${s.dataKey}-${i}`} title={s.name || s.dataKey} defaultOpen={i === 0}>
           <FigmaColor label="Color" tooltip={TIPS['Color']} color={s.color} onChange={(v) => updateSeries(seriesType, i, 'color', v)} />
           <FigmaTextInput label="Name" tooltip={TIPS['Name']} value={s.name} onChange={(v) => updateSeries(seriesType, i, 'name', v)} />
           <FigmaTextInput label="Data Key" tooltip={TIPS['Data Key']} value={s.dataKey} onChange={(v) => updateSeries(seriesType, i, 'dataKey', v)} />
           <FigmaColor label="Stroke" tooltip={TIPS['Stroke']} color={s.strokeColor} onChange={(v) => updateSeries(seriesType, i, 'strokeColor', v)} />
-          <LabeledSlider label="Stroke W" tooltip={TIPS['Stroke W']} value={s.strokeWidth} min={0} max={8} onValueChange={(v) => updateSeries(seriesType, i, 'strokeWidth', v)} />
+          <FigmaNumberInput label="Stroke W" tooltip={TIPS['Stroke W']} value={s.strokeWidth} min={0} max={8} onChange={(v) => updateSeries(seriesType, i, 'strokeWidth', v)} />
           <FigmaNumberInput label="Bar Size" tooltip={TIPS['Bar Size']} value={s.barSize ?? 0} onChange={(v) => updateSeries(seriesType, i, 'barSize', v === 0 ? undefined : v)} min={0} />
           <FigmaNumberInput label="Max Bar Size" tooltip={TIPS['Max Bar Size']} value={s.maxBarSize} onChange={(v) => updateSeries(seriesType, i, 'maxBarSize', v)} min={0} />
           <FigmaNumberInput label="Min Point" tooltip={TIPS['Min Point']} value={s.minPointSize} onChange={(v) => updateSeries(seriesType, i, 'minPointSize', v)} min={0} />
-          <LabeledSlider label="Radius TL" tooltip={TIPS['Radius TL']} value={s.radius[0]} min={0} max={20} onValueChange={(v) => { const r = [...s.radius] as [number, number, number, number]; r[0] = v; updateSeries(seriesType, i, 'radius', r) }} />
-          <LabeledSlider label="Radius TR" tooltip={TIPS['Radius TR']} value={s.radius[1]} min={0} max={20} onValueChange={(v) => { const r = [...s.radius] as [number, number, number, number]; r[1] = v; updateSeries(seriesType, i, 'radius', r) }} />
+          <FigmaNumberInput label="Radius TL" tooltip={TIPS['Radius TL']} value={s.radius[0]} min={0} max={20} onChange={(v) => { const r = [...s.radius] as [number, number, number, number]; r[0] = v; updateSeries(seriesType, i, 'radius', r) }} />
+          <FigmaNumberInput label="Radius TR" tooltip={TIPS['Radius TR']} value={s.radius[1]} min={0} max={20} onChange={(v) => { const r = [...s.radius] as [number, number, number, number]; r[1] = v; updateSeries(seriesType, i, 'radius', r) }} />
           <FigmaTextInput label="Stack ID" tooltip={TIPS['Stack ID']} value={s.stackId} onChange={(v) => updateSeries(seriesType, i, 'stackId', v)} />
           <LabeledSwitch label="Background" tooltip={TIPS['Background']} checked={s.showBackground} onCheckedChange={(v) => updateSeries(seriesType, i, 'showBackground', v)} />
           <FigmaColor label="BG Fill" tooltip={TIPS['BG Fill']} color={s.backgroundFill} onChange={(v) => updateSeries(seriesType, i, 'backgroundFill', v)} disabled={!s.showBackground} disabledReason='Enable "Background" first' />
-          <LabeledSlider label="BG Radius" tooltip={TIPS['BG Radius']} value={s.backgroundRadius} min={0} max={20} onValueChange={(v) => updateSeries(seriesType, i, 'backgroundRadius', v)} disabled={!s.showBackground} disabledReason='Enable "Background" first' />
+          <FigmaNumberInput label="BG Radius" tooltip={TIPS['BG Radius']} value={s.backgroundRadius} min={0} max={20} onChange={(v) => updateSeries(seriesType, i, 'backgroundRadius', v)} disabled={!s.showBackground} disabledReason='Enable "Background" first' />
           <LabeledSwitch label="Show Label" tooltip={TIPS['Show Label']} checked={s.showLabel} onCheckedChange={(v) => updateSeries(seriesType, i, 'showLabel', v)} />
           <FigmaSelect label="Label Pos" tooltip={TIPS['Label Pos']} value={s.labelPosition} options={labelPositionOptions} onChange={(v) => updateSeries(seriesType, i, 'labelPosition', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
-          <LabeledSlider label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onValueChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
+          <FigmaNumberInput label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
           <FigmaColor label="Label Color" tooltip={TIPS['Label Color']} color={s.labelColor} onChange={(v) => updateSeries(seriesType, i, 'labelColor', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
           <LabeledSwitch label="Hide" tooltip={TIPS['Hide']} checked={s.hide} onCheckedChange={(v) => updateSeries(seriesType, i, 'hide', v)} />
           <FigmaSelect label="Legend Icon" tooltip={TIPS['Legend Icon']} value={s.legendType} options={legendTypeOptions} onChange={(v) => updateSeries(seriesType, i, 'legendType', v)} />

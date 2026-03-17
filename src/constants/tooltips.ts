@@ -3,6 +3,8 @@ export const TIPS: Record<string, string> = {
   // Layout
   Width: 'Chart container width in px. 0 = 100% responsive.',
   Height: 'Chart container height in px.',
+  'Container Padding': 'Inner padding of the chart card in px.',
+  'Background Color': 'Background color of the chart card.',
   Top: 'Top margin around the chart area.',
   Right: 'Right margin around the chart area.',
   Bottom: 'Bottom margin around the chart area.',
@@ -114,6 +116,8 @@ export const TIPS: Record<string, string> = {
   'Icon Type': 'Shape of the legend icons.',
   // (Font Color reused from Tooltip section above)
   'Inactive': 'Color of disabled/inactive legend items.',
+  'Legend Margin Top': 'Space above the legend in px.',
+  'Legend Margin Bottom': 'Space below the legend in px.',
 
   // Chart Layout
   'Stack Offset': 'How stacked values are computed (none, expand, etc.).',
@@ -130,6 +134,33 @@ export const TIPS: Record<string, string> = {
   Axis: 'Which axis this reference line is drawn on.',
   Value: 'Position value on the axis for the reference line.',
   'Stroke Width': 'Thickness of the reference line.',
+
+  // Title
+  Title: 'Main heading displayed above the chart.',
+  Weight: 'Font weight of the text.',
+  'Line Height': 'Vertical spacing between text lines in px.',
+  Subtitle: 'Secondary heading displayed below the title.',
+  'Sub Weight': 'Font weight of the subtitle.',
+  'Sub Line H': 'Line height of the subtitle in px.',
+
+  // Global
+  Animation: 'Enable or disable chart entry animations.',
+
+  // Tooltip animation
+  Duration: 'Duration of the tooltip animation in ms.',
+  Easing: 'Easing function for the tooltip animation.',
+
+  // Axis advanced
+  Rotation: 'Rotation angle of tick labels in degrees.',
+  'Pad Start': 'Extra padding at the start of the axis.',
+  'Pad End': 'Extra padding at the end of the axis.',
+  'Data Overflow': 'Allow data points outside the axis domain.',
+
+  // Reference area bounds
+  X1: 'Start X value of the reference area.',
+  X2: 'End X value of the reference area.',
+  Y1: 'Start Y value of the reference area.',
+  Y2: 'End Y value of the reference area.',
 
   // Pie
   'Name Key': 'Data field used for slice names.',

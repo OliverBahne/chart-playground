@@ -2,7 +2,6 @@ import { FigmaSection } from '@/components/shared/figma-section'
 import { FigmaSelect } from '@/components/shared/figma-select'
 import { FigmaTextInput, FigmaNumberInput } from '@/components/shared/figma-input'
 import { FigmaColor } from '@/components/shared/figma-color'
-import { LabeledSlider } from '@/components/shared/labeled-slider'
 import { LabeledSwitch } from '@/components/shared/labeled-switch'
 import { TIPS } from '@/constants/tooltips'
 import type { ChartConfig, AnimationEasing } from '@/types/chart-config'
@@ -31,6 +30,7 @@ export function TooltipControls({ config, update }: TooltipControlsProps) {
   return (
     <FigmaSection
       title="Tooltip"
+      defaultOpen={false}
       visible={tt.show}
       onVisibleChange={(v) => update('tooltip.show', v)}
     >
@@ -47,19 +47,19 @@ export function TooltipControls({ config, update }: TooltipControlsProps) {
       <FigmaSection title="Content Style" defaultOpen={false}>
         <FigmaColor label="BG Color" tooltip={TIPS['BG Color']} color={tt.backgroundColor} onChange={(v) => update('tooltip.backgroundColor', v)} />
         <FigmaColor label="Border" tooltip={TIPS['Border Color']} color={tt.borderColor} onChange={(v) => update('tooltip.borderColor', v)} />
-        <LabeledSlider label="Border R" tooltip={TIPS['Border Radius']} value={tt.borderRadius} min={0} max={16} onValueChange={(v) => update('tooltip.borderRadius', v)} />
-        <LabeledSlider label="Font Size" tooltip={TIPS['Font Size']} value={tt.fontSize} min={8} max={20} onValueChange={(v) => update('tooltip.fontSize', v)} />
+        <FigmaNumberInput label="Border R" tooltip={TIPS['Border Radius']} value={tt.borderRadius} min={0} max={16} onChange={(v) => update('tooltip.borderRadius', v)} />
+        <FigmaNumberInput label="Font Size" tooltip={TIPS['Font Size']} value={tt.fontSize} min={8} max={20} onChange={(v) => update('tooltip.fontSize', v)} />
         <FigmaColor label="Font Color" tooltip={TIPS['Font Color']} color={tt.fontColor} onChange={(v) => update('tooltip.fontColor', v)} />
       </FigmaSection>
 
       <FigmaSection title="Label Style" defaultOpen={false}>
-        <LabeledSlider label="Label Size" tooltip={TIPS['Label Size']} value={tt.labelFontSize} min={8} max={20} onValueChange={(v) => update('tooltip.labelFontSize', v)} />
+        <FigmaNumberInput label="Label Size" tooltip={TIPS['Label Size']} value={tt.labelFontSize} min={8} max={20} onChange={(v) => update('tooltip.labelFontSize', v)} />
         <FigmaColor label="Label Color" tooltip={TIPS['Label Color']} color={tt.labelColor} onChange={(v) => update('tooltip.labelColor', v)} />
       </FigmaSection>
 
       <FigmaSection title="Animation" defaultOpen={false}>
-        <FigmaNumberInput label="Duration" value={tt.animationDuration} onChange={(v) => update('tooltip.animationDuration', v)} min={0} />
-        <FigmaSelect label="Easing" value={tt.animationEasing} options={easingOptions} onChange={(v) => update('tooltip.animationEasing', v)} />
+        <FigmaNumberInput label="Duration" tooltip={TIPS['Duration']} value={tt.animationDuration} onChange={(v) => update('tooltip.animationDuration', v)} min={0} />
+        <FigmaSelect label="Easing" tooltip={TIPS['Easing']} value={tt.animationEasing} options={easingOptions} onChange={(v) => update('tooltip.animationEasing', v)} />
       </FigmaSection>
 
       <FigmaSection title="Escape" defaultOpen={false}>

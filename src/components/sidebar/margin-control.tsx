@@ -1,5 +1,6 @@
 import { FigmaSection } from '@/components/shared/figma-section'
 import { FigmaNumberInput } from '@/components/shared/figma-input'
+import { FigmaColor } from '@/components/shared/figma-color'
 import { TIPS } from '@/constants/tooltips'
 import type { ChartConfig } from '@/types/chart-config'
 
@@ -14,6 +15,8 @@ export function MarginControl({ config, update }: MarginControlProps) {
       <div className="grid grid-cols-2 gap-x-3 gap-y-1">
         <FigmaNumberInput label="Width" tooltip={TIPS['Width']} value={config.chartWidth} onChange={(v) => update('chartWidth', v)} min={0} max={2000} step={10} />
         <FigmaNumberInput label="Height" tooltip={TIPS['Height']} value={config.chartHeight} onChange={(v) => update('chartHeight', v)} min={100} max={2000} step={10} />
+        <FigmaNumberInput label="Padding" tooltip={TIPS['Container Padding']} value={config.containerPadding} onChange={(v) => update('containerPadding', v)} min={0} max={100} />
+        <FigmaColor label="Background" tooltip={TIPS['Background Color']} color={config.backgroundColor} onChange={(v) => update('backgroundColor', v)} />
       </div>
       <div className="grid grid-cols-2 gap-x-3 gap-y-1 mt-1">
         <FigmaNumberInput label="Top" tooltip={TIPS['Top']} value={config.margin.top} onChange={(v) => update('margin.top', v)} min={0} max={200} />

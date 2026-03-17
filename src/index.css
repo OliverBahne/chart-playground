@@ -91,6 +91,12 @@
     @apply h-7 bg-secondary border-none text-[11px] text-foreground rounded-md px-2
            hover:bg-accent focus:ring-1 focus:ring-primary focus:outline-none
            placeholder:text-muted-foreground tabular-nums;
+    -moz-appearance: textfield;
+  }
+  .figma-input::-webkit-outer-spin-button,
+  .figma-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
   .figma-label {
     @apply text-[11px] text-muted-foreground select-none;

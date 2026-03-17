@@ -87,7 +87,9 @@ export const DEFAULT_CONFIG: ChartConfig = {
   chartType: 'line',
   chartWidth: 920,
   chartHeight: 400,
-  margin: { top: 20, right: 30, bottom: 20, left: 30 },
+  containerPadding: 24,
+  backgroundColor: '#1c1c1c',
+  margin: { top: 24, right: 24, bottom: 0, left: 24 },
   animationEnabled: false,
   title: {
     show: false,
@@ -213,7 +215,7 @@ export const DEFAULT_CONFIG: ChartConfig = {
     allowDecimals: true,
     allowDataOverflow: false,
     scale: 'auto',
-    size: 60,
+    size: 'auto',
   },
 
   legend: {
@@ -226,6 +228,8 @@ export const DEFAULT_CONFIG: ChartConfig = {
     fontSize: 12,
     fontColor: '#999',
     inactiveColor: '#ccc',
+    marginTop: 0,
+    marginBottom: 0,
   },
 
   grid: {

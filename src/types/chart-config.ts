@@ -66,7 +66,7 @@ export interface AxisConfig {
   allowDataOverflow: boolean
   scale: ScaleType
   // Dimensions
-  size: number // width for Y, height for X
+  size: number | 'auto' // width for Y, height for X
 }
 
 // ─── Grid ───
@@ -121,6 +121,8 @@ export interface LegendConfig {
   fontSize: number
   fontColor: string
   inactiveColor: string
+  marginTop: number
+  marginBottom: number
 }
 
 // ─── Line Series ───
@@ -301,7 +303,7 @@ export interface ChartLayoutConfig {
 }
 
 // ─── Title ───
-export type FontWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
+export type FontWeight = 400 | 450 | 500 | 600 | 700
 
 export interface TitleConfig {
   show: boolean
@@ -323,6 +325,8 @@ export interface ChartConfig {
   chartType: ChartType
   chartWidth: number   // 0 = 100% responsive
   chartHeight: number
+  containerPadding: number
+  backgroundColor: string
   margin: Margin
   animationEnabled: boolean
   title: TitleConfig

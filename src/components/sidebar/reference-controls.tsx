@@ -1,9 +1,8 @@
 import { Trash2 } from 'lucide-react'
 import { FigmaSection } from '@/components/shared/figma-section'
 import { FigmaSelect } from '@/components/shared/figma-select'
-import { FigmaTextInput } from '@/components/shared/figma-input'
+import { FigmaTextInput, FigmaNumberInput } from '@/components/shared/figma-input'
 import { FigmaColor } from '@/components/shared/figma-color'
-import { LabeledSlider } from '@/components/shared/labeled-slider'
 import { TIPS } from '@/constants/tooltips'
 import type { ChartConfig, LabelPosition, IfOverflow } from '@/types/chart-config'
 import type { ConfigAction } from '@/hooks/use-chart-config'
@@ -43,6 +42,7 @@ export function ReferenceControls({ config, update, dispatch }: ReferenceControl
     <>
       <FigmaSection
         title="Reference Lines"
+        defaultOpen={false}
         onAdd={() => dispatch({ type: 'ADD_REFERENCE_LINE' })}
       >
         {config.referenceLines.map((ref, i) => (
@@ -63,7 +63,7 @@ export function ReferenceControls({ config, update, dispatch }: ReferenceControl
               lines[i] = { ...lines[i], stroke: v }
               update('referenceLines', lines)
             }} />
-            <LabeledSlider label="Stroke W" tooltip={TIPS['Stroke Width']} value={ref.strokeWidth} min={0} max={5} onValueChange={(v) => {
+            <FigmaNumberInput label="Stroke W" tooltip={TIPS['Stroke Width']} value={ref.strokeWidth} min={0} max={5} onChange={(v) => {
               const lines = [...config.referenceLines]
               lines[i] = { ...lines[i], strokeWidth: v }
               update('referenceLines', lines)
@@ -103,26 +103,27 @@ export function ReferenceControls({ config, update, dispatch }: ReferenceControl
 
       <FigmaSection
         title="Reference Areas"
+        defaultOpen={false}
         onAdd={() => dispatch({ type: 'ADD_REFERENCE_AREA' })}
       >
         {config.referenceAreas.map((area, i) => (
           <FigmaSection key={area.id} title={area.label || `Area ${i + 1}`} defaultOpen={i === 0}>
-            <FigmaTextInput label="X1" value={String(area.x1)} onChange={(v) => {
+            <FigmaTextInput label="X1" tooltip={TIPS['X1']} value={String(area.x1)} onChange={(v) => {
               const areas = [...config.referenceAreas]
               areas[i] = { ...areas[i], x1: v }
               update('referenceAreas', areas)
             }} />
-            <FigmaTextInput label="X2" value={String(area.x2)} onChange={(v) => {
+            <FigmaTextInput label="X2" tooltip={TIPS['X2']} value={String(area.x2)} onChange={(v) => {
               const areas = [...config.referenceAreas]
               areas[i] = { ...areas[i], x2: v }
               update('referenceAreas', areas)
             }} />
-            <FigmaTextInput label="Y1" value={String(area.y1)} onChange={(v) => {
+            <FigmaTextInput label="Y1" tooltip={TIPS['Y1']} value={String(area.y1)} onChange={(v) => {
               const areas = [...config.referenceAreas]
               areas[i] = { ...areas[i], y1: v }
               update('referenceAreas', areas)
             }} />
-            <FigmaTextInput label="Y2" value={String(area.y2)} onChange={(v) => {
+            <FigmaTextInput label="Y2" tooltip={TIPS['Y2']} value={String(area.y2)} onChange={(v) => {
               const areas = [...config.referenceAreas]
               areas[i] = { ...areas[i], y2: v }
               update('referenceAreas', areas)
@@ -132,7 +133,7 @@ export function ReferenceControls({ config, update, dispatch }: ReferenceControl
               areas[i] = { ...areas[i], fill: v }
               update('referenceAreas', areas)
             }} />
-            <LabeledSlider label="Fill Opacity" tooltip={TIPS['Fill Opacity']} value={area.fillOpacity} min={0} max={1} step={0.05} onValueChange={(v) => {
+            <FigmaNumberInput label="Fill Opacity" tooltip={TIPS['Fill Opacity']} value={area.fillOpacity} min={0} max={1} step={0.05} onChange={(v) => {
               const areas = [...config.referenceAreas]
               areas[i] = { ...areas[i], fillOpacity: v }
               update('referenceAreas', areas)
@@ -142,7 +143,7 @@ export function ReferenceControls({ config, update, dispatch }: ReferenceControl
               areas[i] = { ...areas[i], stroke: v }
               update('referenceAreas', areas)
             }} />
-            <LabeledSlider label="Stroke W" tooltip={TIPS['Stroke Width']} value={area.strokeWidth} min={0} max={5} onValueChange={(v) => {
+            <FigmaNumberInput label="Stroke W" tooltip={TIPS['Stroke Width']} value={area.strokeWidth} min={0} max={5} onChange={(v) => {
               const areas = [...config.referenceAreas]
               areas[i] = { ...areas[i], strokeWidth: v }
               update('referenceAreas', areas)

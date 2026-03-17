@@ -1,7 +1,7 @@
 import { FigmaSection } from '@/components/shared/figma-section'
 import { FigmaSelect } from '@/components/shared/figma-select'
 import { FigmaColor } from '@/components/shared/figma-color'
-import { LabeledSlider } from '@/components/shared/labeled-slider'
+import { FigmaNumberInput } from '@/components/shared/figma-input'
 import { TIPS } from '@/constants/tooltips'
 import type { ChartConfig, LegendLayout, LegendAlign, LegendVerticalAlign, LegendIconType } from '@/types/chart-config'
 
@@ -47,17 +47,20 @@ export function LegendControls({ config, update }: LegendControlsProps) {
   return (
     <FigmaSection
       title="Legend"
+      defaultOpen={false}
       visible={legend.show}
       onVisibleChange={(v) => update('legend.show', v)}
     >
       <FigmaSelect label="Layout" tooltip={TIPS['Layout']} value={legend.layout} options={layoutOptions} onChange={(v) => update('legend.layout', v)} />
       <FigmaSelect label="Align" tooltip={TIPS['Align']} value={legend.align} options={alignOptions} onChange={(v) => update('legend.align', v)} />
       <FigmaSelect label="V Align" tooltip={TIPS['V Align']} value={legend.verticalAlign} options={vAlignOptions} onChange={(v) => update('legend.verticalAlign', v)} />
-      <LabeledSlider label="Icon Size" tooltip={TIPS['Icon Size']} value={legend.iconSize} min={8} max={32} onValueChange={(v) => update('legend.iconSize', v)} />
+      <FigmaNumberInput label="Icon Size" tooltip={TIPS['Icon Size']} value={legend.iconSize} min={8} max={32} onChange={(v) => update('legend.iconSize', v)} />
       <FigmaSelect label="Icon Type" tooltip={TIPS['Icon Type']} value={legend.iconType} options={iconTypeOptions} onChange={(v) => update('legend.iconType', v)} />
-      <LabeledSlider label="Font Size" tooltip={TIPS['Font Size']} value={legend.fontSize} min={8} max={20} onValueChange={(v) => update('legend.fontSize', v)} />
+      <FigmaNumberInput label="Font Size" tooltip={TIPS['Font Size']} value={legend.fontSize} min={8} max={20} onChange={(v) => update('legend.fontSize', v)} />
       <FigmaColor label="Font Color" tooltip={TIPS['Font Color']} color={legend.fontColor} onChange={(v) => update('legend.fontColor', v)} />
       <FigmaColor label="Inactive" tooltip={TIPS['Inactive']} color={legend.inactiveColor} onChange={(v) => update('legend.inactiveColor', v)} />
+      <FigmaNumberInput label="Margin Top" tooltip={TIPS['Legend Margin Top']} value={legend.marginTop} min={0} max={100} onChange={(v) => update('legend.marginTop', v)} />
+      <FigmaNumberInput label="Margin Btm" tooltip={TIPS['Legend Margin Bottom']} value={legend.marginBottom} min={0} max={100} onChange={(v) => update('legend.marginBottom', v)} />
     </FigmaSection>
   )
 }

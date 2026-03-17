@@ -2,7 +2,6 @@ import { FigmaSection } from '@/components/shared/figma-section'
 import { FigmaSelect } from '@/components/shared/figma-select'
 import { FigmaNumberInput } from '@/components/shared/figma-input'
 import { FigmaColor } from '@/components/shared/figma-color'
-import { LabeledSlider } from '@/components/shared/labeled-slider'
 import { LabeledSwitch } from '@/components/shared/labeled-switch'
 import { TIPS } from '@/constants/tooltips'
 import type { ChartConfig, ScatterSymbol, CurveType, LabelPosition, LegendIconType, AnimationEasing } from '@/types/chart-config'
@@ -71,7 +70,7 @@ const easingOptions: { value: AnimationEasing; label: string }[] = [
 export function ScatterControls({ config, updateSeries, dispatch }: ScatterControlsProps) {
   const seriesType = 'scatterSeries'
   return (
-    <FigmaSection title="Scatter" onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
+    <FigmaSection title="Scatter" defaultOpen={false} onAdd={() => dispatch({ type: 'ADD_SERIES', seriesType })}>
       {config.scatterSeries.map((s, i) => (
         <FigmaSection key={i} title={s.name || `Scatter ${i + 1}`} defaultOpen={i === 0}>
           <FigmaColor label="Color" tooltip={TIPS['Color']} color={s.color} onChange={(v) => updateSeries(seriesType, i, 'color', v)} />
@@ -81,7 +80,7 @@ export function ScatterControls({ config, updateSeries, dispatch }: ScatterContr
           <FigmaSelect label="Joint Type" tooltip={TIPS['Joint Type']} value={s.lineJointType} options={curveOptions} onChange={(v) => updateSeries(seriesType, i, 'lineJointType', v)} disabled={!s.showLine} disabledReason='Enable "Show Line" first' />
           <LabeledSwitch label="Show Label" tooltip={TIPS['Show Label']} checked={s.showLabel} onCheckedChange={(v) => updateSeries(seriesType, i, 'showLabel', v)} />
           <FigmaSelect label="Label Pos" tooltip={TIPS['Label Pos']} value={s.labelPosition} options={labelPositionOptions} onChange={(v) => updateSeries(seriesType, i, 'labelPosition', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
-          <LabeledSlider label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onValueChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
+          <FigmaNumberInput label="Label Size" tooltip={TIPS['Label Size']} value={s.labelFontSize} min={8} max={20} onChange={(v) => updateSeries(seriesType, i, 'labelFontSize', v)} disabled={!s.showLabel} disabledReason='Enable "Show Label" first' />
           <LabeledSwitch label="Hide" tooltip={TIPS['Hide']} checked={s.hide} onCheckedChange={(v) => updateSeries(seriesType, i, 'hide', v)} />
           <FigmaSelect label="Legend Icon" tooltip={TIPS['Legend Icon']} value={s.legendType} options={legendTypeOptions} onChange={(v) => updateSeries(seriesType, i, 'legendType', v)} />
           <FigmaNumberInput label="Anim Begin" tooltip={TIPS['Anim Begin']} value={s.animationBegin} onChange={(v) => updateSeries(seriesType, i, 'animationBegin', v)} min={0} />

@@ -2,7 +2,6 @@ import { FigmaSection } from '@/components/shared/figma-section'
 import { FigmaSelect } from '@/components/shared/figma-select'
 import { FigmaTextInput, FigmaNumberInput } from '@/components/shared/figma-input'
 import { FigmaColor } from '@/components/shared/figma-color'
-import { LabeledSlider } from '@/components/shared/labeled-slider'
 import { LabeledSwitch } from '@/components/shared/labeled-switch'
 import { TIPS } from '@/constants/tooltips'
 import type { ChartConfig, ScaleType } from '@/types/chart-config'
@@ -69,6 +68,7 @@ export function AxisControls({ axisKey, config, update }: AxisControlsProps) {
   return (
     <FigmaSection
       title={title}
+      defaultOpen={false}
       visible={axis.show}
       onVisibleChange={(v) => update(p('show'), v)}
     >
@@ -76,18 +76,18 @@ export function AxisControls({ axisKey, config, update }: AxisControlsProps) {
       <FigmaSelect label="Type" tooltip={TIPS['Type']} value={axis.type} options={axisTypeOptions} onChange={(v) => update(p('type'), v)} />
       <FigmaSelect label="Orient" tooltip={TIPS['Orient']} value={axis.orientation} options={orientOptions} onChange={(v) => update(p('orientation'), v)} />
       <FigmaTextInput label="Label" tooltip={TIPS['Label']} value={axis.label} onChange={(v) => update(p('label'), v)} />
-      <LabeledSlider label="Label Size" tooltip={TIPS['Label Size']} value={axis.labelFontSize} min={8} max={24} onValueChange={(v) => update(p('labelFontSize'), v)} />
+      <FigmaNumberInput label="Label Size" tooltip={TIPS['Label Size']} value={axis.labelFontSize} min={8} max={24} onChange={(v) => update(p('labelFontSize'), v)} />
       <FigmaSelect label="Label Pos" tooltip={TIPS['Label Pos']} value={axis.labelPosition} options={labelPositionOptions} onChange={(v) => update(p('labelPosition'), v)} />
 
       <FigmaSection title="Ticks" defaultOpen={false}>
-        <LabeledSlider label="Tick Count" tooltip={TIPS['Tick Count']} value={axis.tickCount} min={0} max={20} onValueChange={(v) => update(p('tickCount'), v)} />
-        <LabeledSlider label="Tick Size" tooltip={TIPS['Tick Size']} value={axis.tickSize} min={0} max={12} onValueChange={(v) => update(p('tickSize'), v)} />
+        <FigmaNumberInput label="Tick Count" tooltip={TIPS['Tick Count']} value={axis.tickCount} min={0} max={20} onChange={(v) => update(p('tickCount'), v)} />
+        <FigmaNumberInput label="Tick Size" tooltip={TIPS['Tick Size']} value={axis.tickSize} min={0} max={12} onChange={(v) => update(p('tickSize'), v)} />
         <LabeledSwitch label="Tick Line" tooltip={TIPS['Tick Line']} checked={axis.tickLine} onCheckedChange={(v) => update(p('tickLine'), v)} />
-        <LabeledSlider label="Tick Margin" tooltip={TIPS['Tick Margin']} value={axis.tickMargin} min={0} max={20} onValueChange={(v) => update(p('tickMargin'), v)} />
-        <LabeledSlider label="Rotation" value={axis.tickRotation} min={-90} max={90} step={5} onValueChange={(v) => update(p('tickRotation'), v)} />
-        <LabeledSlider label="Font Size" tooltip={TIPS['Font Size']} value={axis.tickFontSize} min={8} max={20} onValueChange={(v) => update(p('tickFontSize'), v)} />
+        <FigmaNumberInput label="Tick Margin" tooltip={TIPS['Tick Margin']} value={axis.tickMargin} min={0} max={20} onChange={(v) => update(p('tickMargin'), v)} />
+        <FigmaNumberInput label="Rotation" tooltip={TIPS['Rotation']} value={axis.tickRotation} min={-90} max={90} step={5} onChange={(v) => update(p('tickRotation'), v)} />
+        <FigmaNumberInput label="Font Size" tooltip={TIPS['Font Size']} value={axis.tickFontSize} min={8} max={20} onChange={(v) => update(p('tickFontSize'), v)} />
         <FigmaColor label="Fill" tooltip={TIPS['Fill']} color={axis.tickFill} onChange={(v) => update(p('tickFill'), v)} />
-        <LabeledSlider label="Min Gap" tooltip={TIPS['Min Gap']} value={axis.minTickGap} min={0} max={50} onValueChange={(v) => update(p('minTickGap'), v)} />
+        <FigmaNumberInput label="Min Gap" tooltip={TIPS['Min Gap']} value={axis.minTickGap} min={0} max={50} onChange={(v) => update(p('minTickGap'), v)} />
         <FigmaSelect
           label="Interval"
           tooltip={TIPS['Interval']}
@@ -106,14 +106,19 @@ export function AxisControls({ axisKey, config, update }: AxisControlsProps) {
       </FigmaSection>
 
       <FigmaSection title="Advanced" defaultOpen={false}>
-        <FigmaNumberInput label="Pad Start" value={axis.paddingStart} onChange={(v) => update(p('paddingStart'), v)} min={0} />
-        <FigmaNumberInput label="Pad End" value={axis.paddingEnd} onChange={(v) => update(p('paddingEnd'), v)} min={0} />
+        <FigmaNumberInput label="Pad Start" tooltip={TIPS['Pad Start']} value={axis.paddingStart} onChange={(v) => update(p('paddingStart'), v)} min={0} />
+        <FigmaNumberInput label="Pad End" tooltip={TIPS['Pad End']} value={axis.paddingEnd} onChange={(v) => update(p('paddingEnd'), v)} min={0} />
         <LabeledSwitch label="Mirror" tooltip={TIPS['Mirror']} checked={axis.mirror} onCheckedChange={(v) => update(p('mirror'), v)} />
         <LabeledSwitch label="Reversed" tooltip={TIPS['Reversed']} checked={axis.reversed} onCheckedChange={(v) => update(p('reversed'), v)} />
         <LabeledSwitch label="Decimals" tooltip={TIPS['Decimals']} checked={axis.allowDecimals} onCheckedChange={(v) => update(p('allowDecimals'), v)} />
-        <LabeledSwitch label="Data Overflow" checked={axis.allowDataOverflow} onCheckedChange={(v) => update(p('allowDataOverflow'), v)} />
+        <LabeledSwitch label="Data Overflow" tooltip={TIPS['Data Overflow']} checked={axis.allowDataOverflow} onCheckedChange={(v) => update(p('allowDataOverflow'), v)} />
         <FigmaSelect label="Scale" tooltip={TIPS['Scale']} value={axis.scale} options={scaleOptions} onChange={(v) => update(p('scale'), v)} />
-        <FigmaNumberInput label="Size" tooltip={TIPS['Size']} value={axis.size} onChange={(v) => update(p('size'), v)} min={0} />
+        <FigmaTextInput label="Size" tooltip={TIPS['Size']} value={String(axis.size)} onChange={(v) => {
+          const lower = v.trim().toLowerCase()
+          if (lower === 'auto') { update(p('size'), 'auto'); return }
+          const n = parseFloat(v)
+          if (!isNaN(n) && n >= 0) update(p('size'), n)
+        }} />
       </FigmaSection>
     </FigmaSection>
   )

@@ -11,7 +11,8 @@ interface ChartPreviewProps {
 }
 
 export function ChartPreview({ config, update }: ChartPreviewProps) {
-  const { chartWidth, chartHeight } = config
+  const { chartWidth, chartHeight, containerPadding } = config
+  const pad = containerPadding ?? 24
   const hasFixedWidth = chartWidth > 0
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<HTMLDivElement>(null)
@@ -41,11 +42,11 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
         const dy = ev.clientY - startY
         if (resizeH) {
           const newW = Math.max(200, startW + (invertH ? -dx : dx))
-          update('chartWidth', Math.round(newW - 48))
+          update('chartWidth', Math.round(newW - pad * 2))
         }
         if (resizeV) {
           const newH = Math.max(150, startH + (invertV ? -dy : dy))
-          update('chartHeight', Math.round(newH - 48))
+          update('chartHeight', Math.round(newH - pad * 2))
         }
       }
 
@@ -107,14 +108,14 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
         <div
           className="relative"
           style={{
-            width: hasFixedWidth ? chartWidth + 48 : '100%',
+            width: hasFixedWidth ? chartWidth + pad * 2 : '100%',
             maxWidth: hasFixedWidth ? undefined : '56rem',
           }}
         >
           <div
             ref={(el) => { containerRef.current = el; chartRef.current = el }}
-            className="bg-card rounded-lg p-6 border border-border w-full flex flex-col"
-            style={{ height: chartHeight + 48 }}
+            className="rounded-lg border border-border w-full flex flex-col"
+            style={{ height: chartHeight + pad * 2, padding: pad, backgroundColor: config.backgroundColor }}
           >
             {config.title.show && (config.title.text || config.title.subtitle) && (
               <div className="shrink-0" style={{ textAlign: config.title.align, paddingBottom: 8 }}>

@@ -1,5 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { LabeledSwitch } from '@/components/shared/labeled-switch'
+import { TIPS } from '@/constants/tooltips'
 import { PresetManager } from './preset-manager'
 import { ChartTypeSelector } from './chart-type-selector'
 import { MarginControl } from './margin-control'
@@ -108,6 +109,7 @@ export function ConfigSidebar({
         <div className="border-b border-border px-3 py-2">
           <LabeledSwitch
             label="Animation"
+            tooltip={TIPS['Animation']}
             checked={config.animationEnabled}
             onCheckedChange={(v) => update('animationEnabled', v)}
           />
