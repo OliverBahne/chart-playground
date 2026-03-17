@@ -119,12 +119,12 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
             {config.title.show && (config.title.text || config.title.subtitle) && (
               <div className="shrink-0" style={{ textAlign: config.title.align, paddingBottom: 8 }}>
                 {config.title.text && (
-                  <div style={{ fontSize: config.title.fontSize, color: config.title.fontColor, fontWeight: config.title.fontWeight ?? 600, lineHeight: config.title.lineHeight ?? 1.3 }}>
+                  <div style={{ fontSize: config.title.fontSize, color: config.title.fontColor, fontWeight: config.title.fontWeight ?? 600, lineHeight: `${config.title.lineHeight ?? 24}px` }}>
                     {config.title.text}
                   </div>
                 )}
                 {config.title.subtitle && (
-                  <div style={{ fontSize: config.title.subtitleFontSize, color: config.title.subtitleFontColor, fontWeight: config.title.subtitleFontWeight ?? 400, lineHeight: config.title.subtitleLineHeight ?? 1.3, marginTop: 2 }}>
+                  <div style={{ fontSize: config.title.subtitleFontSize, color: config.title.subtitleFontColor, fontWeight: config.title.subtitleFontWeight ?? 400, lineHeight: `${config.title.subtitleLineHeight ?? 18}px`, marginTop: 2 }}>
                     {config.title.subtitle}
                   </div>
                 )}
