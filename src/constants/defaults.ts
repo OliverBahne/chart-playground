@@ -89,6 +89,16 @@ export const DEFAULT_CONFIG: ChartConfig = {
   chartHeight: 400,
   margin: { top: 20, right: 30, bottom: 20, left: 30 },
   animationEnabled: false,
+  title: {
+    show: false,
+    text: '',
+    fontSize: 18,
+    fontColor: '#e5e5e5',
+    align: 'left',
+    subtitle: '',
+    subtitleFontSize: 13,
+    subtitleFontColor: '#999',
+  },
 
   chartLayout: {
     layout: 'horizontal',

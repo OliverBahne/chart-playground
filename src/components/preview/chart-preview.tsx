@@ -116,7 +116,23 @@ export function ChartPreview({ config, update }: ChartPreviewProps) {
             className="bg-card rounded-lg p-6 border border-border w-full"
             style={{ height: chartHeight + 48 }}
           >
-            <ChartRenderer config={config} />
+            {config.title.show && (config.title.text || config.title.subtitle) && (
+              <div style={{ textAlign: config.title.align, paddingBottom: 8 }}>
+                {config.title.text && (
+                  <div style={{ fontSize: config.title.fontSize, color: config.title.fontColor, fontWeight: 600, lineHeight: 1.3 }}>
+                    {config.title.text}
+                  </div>
+                )}
+                {config.title.subtitle && (
+                  <div style={{ fontSize: config.title.subtitleFontSize, color: config.title.subtitleFontColor, lineHeight: 1.3, marginTop: 2 }}>
+                    {config.title.subtitle}
+                  </div>
+                )}
+              </div>
+            )}
+            <div style={{ flex: 1, minHeight: 0, height: '100%' }}>
+              <ChartRenderer config={config} />
+            </div>
           </div>
 
           {/* Edge handles */}

@@ -300,6 +300,18 @@ export interface ChartLayoutConfig {
   maxBarSize: number
 }
 
+// ─── Title ───
+export interface TitleConfig {
+  show: boolean
+  text: string
+  fontSize: number
+  fontColor: string
+  align: 'left' | 'center' | 'right'
+  subtitle: string
+  subtitleFontSize: number
+  subtitleFontColor: string
+}
+
 // ─── Main Config ───
 export interface ChartConfig {
   chartType: ChartType
@@ -307,6 +319,7 @@ export interface ChartConfig {
   chartHeight: number
   margin: Margin
   animationEnabled: boolean
+  title: TitleConfig
 
   // Chart layout
   chartLayout: ChartLayoutConfig

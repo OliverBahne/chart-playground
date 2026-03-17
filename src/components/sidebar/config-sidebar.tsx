@@ -12,6 +12,7 @@ import { GridControls } from './grid-controls'
 import { TooltipControls } from './tooltip-controls'
 import { LegendControls } from './legend-controls'
 import { BrushControls } from './brush-controls'
+import { TitleControls } from './title-controls'
 import { ReferenceControls } from './reference-controls'
 import type { ChartConfig } from '@/types/chart-config'
 import type { ConfigAction } from '@/hooks/use-chart-config'
@@ -63,6 +64,8 @@ export function ConfigSidebar({
         />
 
         <MarginControl config={config} update={update} />
+
+        <TitleControls config={config} update={update} />
 
         {(ct === 'bar' || isCombo) && (
           <ChartLayoutControls config={config} update={update} />
