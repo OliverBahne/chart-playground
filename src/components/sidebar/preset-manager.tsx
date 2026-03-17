@@ -2,11 +2,7 @@ import { useState } from 'react'
 import { Save, Trash2 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { ChartConfig } from '@/types/chart-config'
-
-interface Preset {
-  name: string
-  config: ChartConfig
-}
+import type { Preset } from '@/hooks/use-presets'
 
 interface PresetManagerProps {
   presets: Preset[]
@@ -55,7 +51,7 @@ export function PresetManager({ presets, onSave, onRemove, onLoad, currentConfig
               ))}
             </SelectContent>
           </Select>
-          {selected && (
+          {selected && !presets.find((p) => p.name === selected)?.builtIn && (
             <button className="h-7 w-7 shrink-0 flex items-center justify-center hover:bg-accent/50 rounded" onClick={handleDelete}>
               <Trash2 className="h-3 w-3 text-muted-foreground" />
             </button>
