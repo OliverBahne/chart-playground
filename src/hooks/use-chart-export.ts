@@ -4,27 +4,60 @@ function getChartSvg(containerEl: HTMLElement): SVGSVGElement | null {
   return containerEl.querySelector('svg.recharts-surface') ?? containerEl.querySelector('svg')
 }
 
-function serializeSvg(svg: SVGSVGElement): string {
+/** CSS properties that affect SVG rendering and need to be inlined */
+const SVG_STYLE_PROPS = [
+  'fill', 'fill-opacity', 'fill-rule',
+  'stroke', 'stroke-width', 'stroke-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin',
+  'opacity', 'visibility', 'display',
+  'font-family', 'font-size', 'font-weight', 'font-style',
+  'text-anchor', 'dominant-baseline', 'letter-spacing',
+  'clip-path', 'clip-rule', 'cursor',
+] as const
+
+function inlineStyles(original: SVGSVGElement, clone: SVGSVGElement) {
+  const origEls = original.querySelectorAll('*')
+  const cloneEls = clone.querySelectorAll('*')
+
+  origEls.forEach((origEl, i) => {
+    const cloneEl = cloneEls[i] as SVGElement | HTMLElement
+    if (!cloneEl) return
+
+    const computed = window.getComputedStyle(origEl)
+    const inlined: string[] = []
+    for (const prop of SVG_STYLE_PROPS) {
+      const val = computed.getPropertyValue(prop)
+      if (val) inlined.push(`${prop}:${val}`)
+    }
+    if (inlined.length) {
+      cloneEl.setAttribute('style', inlined.join(';'))
+    }
+  })
+}
+
+function serializeSvg(svg: SVGSVGElement, bgColor?: string): string {
   const clone = svg.cloneNode(true) as SVGSVGElement
-  // Ensure width/height attributes are set for standalone SVG
   const box = svg.getBoundingClientRect()
   clone.setAttribute('width', String(box.width))
   clone.setAttribute('height', String(box.height))
   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
 
-  // Inline computed styles for text elements so they render correctly outside the DOM
-  const originalTexts = svg.querySelectorAll('text, tspan')
-  const clonedTexts = clone.querySelectorAll('text, tspan')
-  originalTexts.forEach((orig, i) => {
-    const computed = window.getComputedStyle(orig)
-    const el = clonedTexts[i] as SVGElement
-    if (el) {
-      el.style.fontFamily = computed.fontFamily
-      el.style.fontSize = computed.fontSize
-      el.style.fontWeight = computed.fontWeight
-      el.style.fill = computed.fill
-    }
+  // Remove any Recharts class names since they won't resolve outside the DOM
+  clone.querySelectorAll('[class]').forEach((el) => {
+    el.removeAttribute('class')
   })
+  clone.removeAttribute('class')
+
+  // Inline all computed styles
+  inlineStyles(svg, clone)
+
+  // Optionally prepend a background rect (for PNG export)
+  if (bgColor) {
+    const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+    bgRect.setAttribute('width', '100%')
+    bgRect.setAttribute('height', '100%')
+    bgRect.setAttribute('fill', bgColor)
+    clone.insertBefore(bgRect, clone.firstChild)
+  }
 
   return new XMLSerializer().serializeToString(clone)
 }
@@ -38,6 +71,11 @@ function downloadBlob(blob: Blob, filename: string) {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
+}
+
+function getContainerBgColor(el: HTMLElement): string {
+  const computed = window.getComputedStyle(el)
+  return computed.backgroundColor || '#1e1e1e'
 }
 
 export function useChartExport(containerRef: RefObject<HTMLElement | null>) {
@@ -59,7 +97,8 @@ export function useChartExport(containerRef: RefObject<HTMLElement | null>) {
     if (!svg) return
 
     const box = svg.getBoundingClientRect()
-    const svgString = serializeSvg(svg)
+    const bgColor = getContainerBgColor(el)
+    const svgString = serializeSvg(svg, bgColor)
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' })
     const url = URL.createObjectURL(svgBlob)
 
